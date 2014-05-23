@@ -110,9 +110,8 @@ class ArrayField(six.with_metaclass(models.SubfieldBase, models.Field)):
                 'type': '{0}{1}'.format(self._array_type, "[]" * self._dimension),
                 'check': None
             }
-    else:
-        def db_type(self, connection):
-            return '{0}{1}'.format(self._array_type, "[]" * self._dimension)
+    def db_type(self, connection):
+        return '{0}{1}'.format(self._array_type, "[]" * self._dimension)
 
 
 # South support
@@ -197,7 +196,6 @@ if django.VERSION[:2] >= (1, 7):
             params = lhs_params + rhs_params
             return '%s && %s' % (lhs, rhs), params
 
-    from django.db.models.fields import Field
-    Field.register_lookup(ContainedByLookup)
-    Field.register_lookup(ContainsLookup)
-    Field.register_lookup(OverlapLookip)
+    ArrayField.register_lookup(ContainedByLookup)
+    ArrayField.register_lookup(ContainsLookup)
+    ArrayField.register_lookup(OverlapLookip)
